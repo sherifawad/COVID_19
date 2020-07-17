@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Xamarin.Essentials;
 
 namespace COVID_19
 {
@@ -27,5 +28,6 @@ namespace COVID_19
 
             return true;
         }
+
     }
 }

@@ -2,19 +2,34 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms" xmlns:Lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
              mc:Ignorable="d"
              x:Class="COVID_19.MainPage">
 
-    <StackLayout>
-
-        <Picker Title="Select Country" 
-                ItemsSource="{Binding CountriesListName, Mode=TwoWay}" 
-                SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" />
+    <Grid>
+        <Lottie:AnimationView Grid.Row="1"
+	                x:Name="animationView"
+	                Animation="no-connection.json" 
+	                Loop="True" 
+	                AutoPlay="False"
+                    IsVisible="{Binding NotConnected}"
+                    IsPlaying="{Binding NotConnected}"
+        />
     
-        <microcharts:ChartView x:Name="chartView" Chart="{Binding ChartData}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
 
-    </StackLayout>
+        <StackLayout>
+
+            <Picker Title="Select Country" 
+                    ItemsSource="{Binding CountriesListName, Mode=TwoWay}" 
+                    SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" />
+    
+            <microcharts:ChartView x:Name="chartView" Chart="{Binding ChartData}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+
+            <Label Text="{Binding LastUpdated}" FontSize="Large" TextColor="Black" />
+
+        </StackLayout>
+
+    </Grid>
 
 
 </ContentPage>

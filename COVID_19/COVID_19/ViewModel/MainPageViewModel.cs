@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Entry = Microcharts.Entry;
@@ -78,14 +79,50 @@ namespace COVID_19
             get { return _countriesListName; }
             set { SetProperty(ref _countriesListName, value); }
         }
+        
+
+        private bool _notConnected;
+
+        public bool NotConnected
+        {
+            get { return _notConnected; }
+            set { SetProperty(ref _notConnected, value); }
+        }
+        
+        private string _lastUpdated;
+
+        public string LastUpdated
+        {
+            get { return _lastUpdated; }
+            set { SetProperty(ref _lastUpdated, value); }
+        }
+
         #endregion
 
         #region Default Constructor
 
         public MainPageViewModel()
         {
-            Task.FromResult(GetAfftectedNumbersFromAPI());
-            Task.FromResult(GetRecoveryAndFatalityRate());
+            NotConnected = Connectivity.NetworkAccess != NetworkAccess.Internet;
+
+            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+
+            if (!NotConnected) {
+
+                Task.WhenAll(GetAfftectedNumbersFromAPI(),
+                    GetRecoveryAndFatalityRate());
+            }
+        }
+
+        void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            NotConnected = e.NetworkAccess != NetworkAccess.Internet;
+            if (!NotConnected)
+            {
+
+                Task.WhenAll(GetAfftectedNumbersFromAPI(),
+                    GetRecoveryAndFatalityRate());
+            }
         }
 
         private async Task GetAfftectedNumbersFromAPI()
@@ -139,6 +176,8 @@ namespace COVID_19
             };
 
             ChartEntries = Entries;
+
+            LastUpdated = "Last Update:  " + models.lastUpdate.ToString();
 
             ChartData = new RadialGaugeChart() { Entries = Entries };
         }
