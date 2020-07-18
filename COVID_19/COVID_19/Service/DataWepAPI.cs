@@ -11,19 +11,19 @@ namespace COVID_19
         private readonly IRepositoryApi _genericRepository = DependencyService.Get<IRepositoryApi>();
         private readonly string BaseURL = "https://covid19.mathdro.id/api/";
 
-        public async Task<Countries> GetCountriesList()
+        public async Task<Allcontinents[]> GetCountriesList()
         {
-            return await _genericRepository.GetAsync<Countries>(BaseURL + "countries/");
+            return await _genericRepository.GetAsync<Allcontinents[]>("https://corona.lmao.ninja/v2/continents?yesterday=true&sort=");
         }
 
-        public async Task<Models> GetCountry(string countryName)
+        public async Task<CountryStatus> GetCountry(string countryName)
         {
-            return await _genericRepository.GetAsync<Models>(BaseURL + "countries/" + countryName);
+            return await _genericRepository.GetAsync<CountryStatus>($"https://corona.lmao.ninja/v2/countries/{countryName}?yesterday=true&strict=true&query =");
         }
 
-        public async Task<Models> GetTotall()
+        public async Task<AllDataSummery> GetTotall()
         {
-            return await _genericRepository.GetAsync<Models>(BaseURL);
+            return await _genericRepository.GetAsync<AllDataSummery>("https://corona.lmao.ninja/v2/all");
         }
     }
 }

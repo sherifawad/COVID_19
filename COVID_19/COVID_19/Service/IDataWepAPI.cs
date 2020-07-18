@@ -7,10 +7,10 @@ namespace COVID_19
 {
     public interface IDataWepAPI
     {
-        Task<Models> GetTotall();
+        Task<AllDataSummery> GetTotall();
 
-        Task<Models> GetCountry(string countryName);
+        Task<CountryStatus> GetCountry(string countryName);
 
-        Task<Countries> GetCountriesList();
+        Task<Allcontinents[]> GetCountriesList();
     }
 }

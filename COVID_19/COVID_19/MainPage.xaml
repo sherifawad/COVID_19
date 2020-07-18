@@ -3,11 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms" xmlns:Lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
+             xmlns:local="clr-namespace:COVID_19"
              mc:Ignorable="d"
              x:Class="COVID_19.MainPage">
 
-    <Grid>
-        <Lottie:AnimationView Grid.Row="1"
+    <Grid Margin="20">
+        <Lottie:AnimationView 
 	                x:Name="animationView"
 	                Animation="no-connection.json" 
 	                Loop="True" 
@@ -15,17 +16,87 @@
                     IsVisible="{Binding NotConnected}"
                     IsPlaying="{Binding NotConnected}"
         />
-    
 
-        <StackLayout>
 
-            <Picker Title="Select Country" 
+        <StackLayout IsVisible="{Binding NotEmptyList}" >
+
+            <Picker Title="Select Country" x:Name="picker"
                     ItemsSource="{Binding CountriesListName, Mode=TwoWay}" 
                     SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" />
-    
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button Text="All" Grid.Column="0"                     
+                    Command="{Binding AllStatCommand}"/>
+
+                <Button Text="Today" Grid.Column="1"                    
+                    Command="{Binding TodayStatCommand}"/>
+
+            </Grid>
+
+            <!--<StackLayout Orientation="Horizontal"  BackgroundColor="Aqua" HorizontalOptions="CenterAndExpand">
+
+                <Button Text="All"                     
+                    Command="{Binding AllStatCommand}"/>
+
+                <Button Text="Today"                     
+                    Command="{Binding TodayStatCommand}"/>
+
+                --><!--<StackLayout  HorizontalOptions="End">
+
+                    <Label Text="Last Update : " FontSize="Micro" TextColor="Purple" />
+                    <Label Text="{Binding LastUpdated}" FontSize="Micro" TextColor="Black" />
+
+            </StackLayout>-->
+
+                <!--<Label Text="{Binding LastUpdated}" FontSize="Micro" TextColor="Purple" VerticalOptions="Center" />--><!--
+
+            </StackLayout>-->
+            
+
             <microcharts:ChartView x:Name="chartView" Chart="{Binding ChartData}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
 
-            <Label Text="{Binding LastUpdated}" FontSize="Large" TextColor="Black" />
+            <StackLayout Orientation="Horizontal">
+                <BoxView BackgroundColor="#fffb1a" />
+                <Label Text="Confirmed"
+                                 TextColor="#c9c618" />
+                <Label Text="{Binding SelectedModel.confirmed.value}"
+                                 HorizontalOptions="EndAndExpand"
+                                 TextColor="#c9c618" />
+            </StackLayout>
+            
+            <StackLayout Orientation="Horizontal">
+                <BoxView BackgroundColor="#77d065" />
+                <Label Text="Recovered"
+                                 TextColor="#77d065" />
+                <Label Text="{Binding SelectedModel.recovered.value}"
+                                 HorizontalOptions="EndAndExpand"
+                                 TextColor="#77d065" />
+            </StackLayout>
+            
+            <StackLayout Orientation="Horizontal">
+                <BoxView BackgroundColor="#b455b6" />
+                <Label Text="Deaths"
+                                 TextColor="#b455b6" />
+                <Label Text="{Binding SelectedModel.deaths.value}"
+                                 HorizontalOptions="EndAndExpand"
+                                 TextColor="#b455b6" />
+            </StackLayout>
+            
+
+            <StackLayout Orientation="Horizontal" 
+                         VerticalOptions="End" HorizontalOptions="Center"
+                         BackgroundColor="White">
+
+                <Label Text="Last Update : " FontSize="Small" TextColor="Red" />
+                <Label Text="{Binding LastUpdated}" FontSize="Small" TextColor="Black" />
+
+            </StackLayout>
+
 
         </StackLayout>
 
