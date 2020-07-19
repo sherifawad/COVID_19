@@ -9,7 +9,7 @@
              x:Class="COVID_19.MainPage">
 
     <Grid Margin="20">
-        <Lottie:AnimationView  BackgroundColor="White"
+        <Lottie:AnimationView
 	                x:Name="animationView"
 	                Animation="no-connection.json" 
 	                Loop="True" 
