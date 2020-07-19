@@ -5,10 +5,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms" xmlns:Lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
              xmlns:local="clr-namespace:COVID_19"
              mc:Ignorable="d"
+             Visual="Material"
              x:Class="COVID_19.MainPage">
 
     <Grid Margin="20">
-        <Lottie:AnimationView 
+        <Lottie:AnimationView  BackgroundColor="White"
 	                x:Name="animationView"
 	                Animation="no-connection.json" 
 	                Loop="True" 
@@ -16,8 +17,14 @@
                     IsVisible="{Binding NotConnected}"
                     IsPlaying="{Binding NotConnected}"
         />
+        
+        <Grid IsVisible="{Binding NotConnected, Converter={local:BooleanInvertConverter}}" >
+            
+            <ActivityIndicator VerticalOptions="Center" HorizontalOptions="Center"
+                IsVisible="{Binding NotEmptyList, Converter={local:BooleanInvertConverter}}"
+                               IsRunning="{Binding NotEmptyList, Converter={local:BooleanInvertConverter}}" />
 
-
+        </Grid>
         <StackLayout IsVisible="{Binding NotEmptyList}" >
 
             <Picker Title="Select Country" x:Name="picker"
