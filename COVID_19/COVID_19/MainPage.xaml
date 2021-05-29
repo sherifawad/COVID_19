@@ -2,20 +2,20 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms" xmlns:Lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms" 
+             xmlns:Lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
              xmlns:local="clr-namespace:COVID_19"
              mc:Ignorable="d"
-             Visual="Material"
              x:Class="COVID_19.MainPage">
 
     <Grid Margin="20">
         <Lottie:AnimationView
 	                x:Name="animationView"
 	                Animation="no-connection.json" 
-	                Loop="True" 
-	                AutoPlay="False"
+	                RepeatMode="Infinite"
+	                AutoPlay="True"
                     IsVisible="{Binding NotConnected}"
-                    IsPlaying="{Binding NotConnected}"
         />
         
         <Grid IsVisible="{Binding NotConnected, Converter={local:BooleanInvertConverter}}" >
@@ -27,7 +27,7 @@
         </Grid>
         <StackLayout IsVisible="{Binding NotEmptyList}" >
 
-            <Picker Title="Select Country" x:Name="picker"
+            <Picker Title="Select Country" x:Name="picker"   
                     ItemsSource="{Binding CountriesListName, Mode=TwoWay}" 
                     SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" />
 
@@ -37,10 +37,10 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Button Text="All" Grid.Column="0"                     
+                <Button Text="All" Grid.Column="0" BorderWidth="2" BorderColor="{Binding IsAll, Converter={local:BooleanToColorConverter}}"                     
                     Command="{Binding AllStatCommand}"/>
 
-                <Button Text="Today" Grid.Column="1"                    
+                <Button Text="Today" Grid.Column="1" BorderWidth="2" BorderColor="{Binding IsToday, Converter={local:BooleanToColorConverter}}"                    
                     Command="{Binding TodayStatCommand}"/>
 
             </Grid>
@@ -68,12 +68,12 @@
             <microcharts:ChartView x:Name="chartView" Chart="{Binding ChartData}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
 
             <StackLayout Orientation="Horizontal">
-                <BoxView BackgroundColor="#fffb1a" />
+                <BoxView BackgroundColor="Orange" />
                 <Label Text="Confirmed"
-                                 TextColor="#c9c618" />
+                                 TextColor="Orange" />
                 <Label Text="{Binding SelectedModel.confirmed.value}"
                                  HorizontalOptions="EndAndExpand"
-                                 TextColor="#c9c618" />
+                                 TextColor="Orange" />
             </StackLayout>
             
             <StackLayout Orientation="Horizontal">

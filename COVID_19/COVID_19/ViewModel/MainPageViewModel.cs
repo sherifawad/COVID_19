@@ -10,7 +10,6 @@ using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
-using Entry = Microcharts.Entry;
 
 namespace COVID_19
 {
@@ -21,10 +20,12 @@ namespace COVID_19
         private readonly IDataWepAPI _data = DependencyService.Get<IDataWepAPI>();
 
         public Models CovidDetails { get; set; }
-        public Entry[] ChartEntries { get; set; }
+        public ChartEntry[] ChartEntries { get; set; }
         public Chart ChartData { get; set; }
 
         public Models SelectedModel { get; set; }
+        public bool IsToday { get; set; }
+        public bool IsAll { get; set; }
 
         private string _selectedCountry;
 
@@ -156,7 +157,9 @@ namespace COVID_19
             if (!NotConnected) {
                 //Task.FromResult(GetAll());
 
-                Task.WhenAll(GetTotalAsync(),
+                Task.WhenAll(
+                    GetAll(),
+                    GetTotalAsync(),
                     GetRecoveryAndFatalityRate()
                     );
             }
@@ -167,9 +170,9 @@ namespace COVID_19
         private async Task GetTotalAsync()
         {
             if (SelectedCountry == null)
-                await GetAll();
+                await GetAll(false);
             else
-                await GetByCountry(SelectedCountry);
+                await GetByCountry(SelectedCountry, false);
         }
 
         private async Task ToDayAsync()
@@ -201,8 +204,10 @@ namespace COVID_19
         #region Methods
 
 
-        private async Task GetAll(bool toDay = false)
+        private async Task GetAll(bool toDay = true)
         {
+            IsToday = toDay;
+            IsAll = !toDay;
             var data = new Models();
 
             var status = await _data.GetTotall();
@@ -233,8 +238,10 @@ namespace COVID_19
             UpdateRecoveryAndFatalityRate(data);
         }
 
-        private async Task GetByCountry(string countryName, bool toDay = false)
+        private async Task GetByCountry(string countryName, bool toDay = true)
         {
+            IsToday = toDay;
+            IsAll = !toDay; 
             var data = new Models();
 
             var status = await _data.GetCountry(countryName);
@@ -277,33 +284,39 @@ namespace COVID_19
         {
             SelectedModel = models;
 
-            var Entries = new[]
+            var chartEntries = new[]
             {
-                 new Entry(models.deaths.value)
+                 new ChartEntry(models.deaths.value)
                  {
                      Label = "Deaths",
                      ValueLabel = models.deaths.value.ToString(),
-                     Color = SKColor.Parse("#b455b6")
+                     Color = SKColor.Parse("#b455b6"),
+                     TextColor = SKColor.Parse("#b455b6"),
+                     ValueLabelColor = SKColor.Parse("#b455b6")
                  },
-                 new Entry(models.recovered.value)
+                 new ChartEntry(models.recovered.value)
                  {
                      Label = "Recovered",
                      ValueLabel = models.recovered.value.ToString(),
-                     Color = SKColor.Parse("#77d065")
+                     Color = SKColor.Parse("#77d065"),
+                     TextColor = SKColor.Parse("#77d065"),
+                     ValueLabelColor = SKColor.Parse("#77d065")
                  },
-                 new Entry(models.confirmed.value)
+                 new ChartEntry(models.confirmed.value)
                  {
                      Label = "Confirmed",
                      ValueLabel = models.confirmed.value.ToString(),
-                     Color = SKColor.Parse("#fffb1a")
+                     Color = SKColor.Parse(Color.Orange.ToHex()),
+                     TextColor = SKColor.Parse(Color.Orange.ToHex()),
+                     ValueLabelColor = SKColor.Parse(Color.Orange.ToHex())
                  }
             };
 
-            ChartEntries = Entries;
+            ChartEntries = chartEntries;
 
             LastUpdated =  models.lastUpdate.ToString();
 
-            ChartData = new RadialGaugeChart() { Entries = Entries };
+            ChartData = new RadialGaugeChart() { Entries = chartEntries };
         }
 
         private DateTime GetDateFormLong(long time)
