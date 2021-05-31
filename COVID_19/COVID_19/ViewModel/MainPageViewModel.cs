@@ -147,6 +147,9 @@ namespace COVID_19
         {
             NotEmptyList = false;
 
+            IsToday = true;
+            IsAll = false;          
+            
             TodayStatCommand = new Command(async () => await ToDayAsync());
             AllStatCommand = new Command(async () => await GetTotalAsync());
 
@@ -159,7 +162,7 @@ namespace COVID_19
 
                 Task.WhenAll(
                     GetAll(),
-                    GetTotalAsync(),
+                    ToDayAsync(),
                     GetRecoveryAndFatalityRate()
                     );
             }
@@ -316,7 +319,9 @@ namespace COVID_19
 
             LastUpdated =  models.lastUpdate.ToString();
 
-            ChartData = new RadialGaugeChart() { Entries = chartEntries };
+            ChartData = new RadialGaugeChart() { Entries = chartEntries,
+                BackgroundColor = SKColors.Transparent
+            };
         }
 
         private DateTime GetDateFormLong(long time)

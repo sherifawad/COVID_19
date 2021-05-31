@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
-using Lottie.Forms.iOS.Renderers;
 using UIKit;
 
 namespace COVID_19.iOS
@@ -25,7 +24,6 @@ namespace COVID_19.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             global::Xamarin.Forms.FormsMaterial.Init();
-            AnimationViewRenderer.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
